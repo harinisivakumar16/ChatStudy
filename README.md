@@ -42,36 +42,59 @@ Client-server chat applications are software systems that enable real-time commu
 
 ## Architecture:
 ## Client-Server Model:
-Client-server chat applications typically follow the client-server model, where one entity acts as the server, managing connections and facilitating communication, and one or more entities act as clients, initiating communication with the server.
+```
+import socket
 
-## Communication Protocols:
-The choice of communication protocol is crucial. Many chat applications use TCP (Transmission Control Protocol) for reliable, connection-oriented communication to ensure the ordered and error-free exchange of messages.
-User Authentication:
-User authentication mechanisms are essential to ensure secure and authorized access to the chat system. This can involve username-password authentication or more advanced methods like tokens.
-## Components of Client-Server Chat Applications:
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+client.connect(("localhost", 9999))
+
+done=False
+
+while not done:
+    client.send(input("Message ").encode('utf-8'))
+    msg = client.recv(1024).decode('utf-8')
+
+    if msg == 'quit':
+        done=True
+    else:
+        print(msg)
+
+
+
+client.close()
+```
+
 ## Server-Side Components:
+```
+import socket
+from base64 import decode
+from operator import truediv
 
-•	Socket Handling: The server manages incoming client connections using sockets, creating a separate thread or process for each connected client.
-•	User Management: Maintaining information about connected users, their status, and handling login/logout functionality.
-•	Message Routing: Implementing logic to route messages from one client to another, ensuring proper delivery.
+server =socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('localhost', 9999))
+server.listen()
+client,addr=server.accept()
 
-## Considerations in Development:
-1.	Concurrency and Multithreading:
-•	Chat applications often require handling multiple connections simultaneously. The server must be designed to support concurrency, commonly achieved through multithreading or asynchronous programming.
-2.	Security:
-•	Ensuring the security of user data and messages is paramount. Encryption techniques, such as SSL/TLS, can be implemented to secure data in transit. Proper user authentication mechanisms help prevent unauthorized access.
-3.	Scalability:
-•	As the number of users grows, the chat application must be scalable. This involves optimizing server-side architecture to handle increasing loads efficiently.
-4.	Persistence:
-•	Some chat applications implement message persistence, allowing users to retrieve past messages. This may involve using databases to store and retrieve chat history.
+done = False
 
-5.	Notification Systems:
-•	Implementing real-time notifications to inform users of new messages, user presence changes, or other relevant events.
+while not done:
+    msg = client.recv(1024).decode('utf-8')
+
+    if msg == 'quit':
+        done = True
+    else:
+        print(msg)
+
+    client.send(input("Message ").encode('utf-8'))
 
 
-Client-server chat applications are versatile tools that facilitate real-time communication between users over a network. They incorporate various components, including server-side and client-side elements, and must consider factors such as security, scalability, and concurrency. As technology continues to advance, client-server chat applications remain integral for collaborative communication in various domains.
+client.close()
+server.close()
+```
+## Output
 
-Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
+<img width="1032" height="278" alt="Screenshot 2026-02-28 205610" src="https://github.com/user-attachments/assets/c340eecd-e32b-4911-8932-76064b9c5e70" />
 
 
 ## Result:
